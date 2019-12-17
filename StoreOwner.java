@@ -24,24 +24,21 @@ public class StoreOwner extends Customer {
     }   
     
     
+    
     public void newStore(String storeID, String storeName, String storeAddress, String storePhoneNo, String storeType, int views , boolean onSite){
     store sd = new store( storeID ,  storeName,  storeAddress,  storePhoneNo,  storeType,  views ,  onSite , ownerID);
     }
-    public void viewProducts(){
+
+    public void addProduct(String storeID , String productID , float price , int amount){
+        products products = new products();
+        products.viewProducts();
         try{
-            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
-            statObj = conObj.createStatement();
-            resObj=statObj.executeQuery("Select * From PRODUCTS");
-            while(resObj.next()){
-                System.out.println(resObj.getString("productID")+ "\t   " + resObj.getString("productname"));
-            }           
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+             conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+             statObj = conObj.createStatement();
+             resObj=statObj.executeQuery("INSERT INTO INVENTORY VALUES ( "+storeID+ "," +productID+ "," +price+ "," +amount+ ")");            
+    }catch(SQLException e){
+        e.printStackTrace();
     }
-    public void addProduct(){
-        viewProducts();
-        // add to list;
     
 }
     

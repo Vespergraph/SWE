@@ -23,6 +23,16 @@ public class products{
     Connection conObj = null;
     Statement statObj = null;
     ResultSet resObj = null;
+    ArrayList<products> prodList = new ArrayList<>();
+    
+    public String getProductID() {
+        return productID;
+    }   
+    
+    products(){
+        
+    }
+           
     products(String productID, String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
         this.productID = productID;
         this.productName = productName;
@@ -33,6 +43,7 @@ public class products{
         
         
     }
+    
     public void addProduct(String productID, String productName, float upperLimit , float lowerLimit  , String category ,  boolean onlineProduct){
         try{
               conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
@@ -44,6 +55,21 @@ public class products{
         }
     }
 
+    public ArrayList<products> viewProducts(){
+        try{
+            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+            statObj = conObj.createStatement();
+            resObj=statObj.executeQuery("Select * From PRODUCTS");
+            while(resObj.next()){
+             //   System.out.println(resObj.getString("productID")+ "\t   " + resObj.getString("productname"));
+             products pr = new products(resObj.getString("productID") , resObj.getString("productName") , resObj.getFloat("priceUpperLimit") , resObj.getFloat("priceLowerLimit") , resObj.getString("category") , resObj.getBoolean("onlineproduct"));
+             prodList.add(pr);
+            }           
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return prodList;
+    }   
 
     
 }

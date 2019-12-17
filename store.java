@@ -27,10 +27,9 @@ public class store {
        ResultSet resObj = null;
        admin admin = new admin();
        
-       List<products> pList = new ArrayList<products>();
        
        public store(){
-           views++;
+           //views++;
        }
        
         store(String storeID, String storeName, String storeAddress, String storePhoneNo, String storeType, int views , boolean onSite, String ownerID){
@@ -60,10 +59,5 @@ public class store {
            }
 
        }
-    public List<products> getList(){
-    return pList;
-    }
-    public void addToList(products p){
-        pList.add(p);
-    }
+  
 }

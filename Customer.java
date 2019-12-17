@@ -76,5 +76,8 @@ public class Customer{
     public void viewStore(){
         store s = new store();
     }
+    public void buyProduct(String productID, int quanitity){
+        
+    }
 }
 
