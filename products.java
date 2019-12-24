@@ -15,9 +15,9 @@ public class products{
     private String productName;
     private float upperLimit;
     private float lowerLimit;
-    private float price;
+   // private float price = 0;
     private String category;
-    private int quantity;
+    //private int quantity = 0;
     private boolean onlineProduct;
  //   private boolean productVisibility;
     Connection conObj = null;
@@ -32,19 +32,34 @@ public class products{
     products(){
         
     }
+    
+    products(String productID ,String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
+    this.productID = productID;
+    this.productName = productName;
+    this.upperLimit = upperLimit;
+    this.lowerLimit = lowerLimit;
+    this.category = category ;
+    this.onlineProduct = onlineProduct;
+    }
+
            
-    products(String productID, String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
-        this.productID = productID;
+    products(String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
+        productID = UUID. randomUUID(). toString();
         this.productName = productName;
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
         this.category = category ;
         this.onlineProduct = onlineProduct;
-        
-        
+        //addProduct(productID , productName , upperLimit , lowerLimit , category , onlineProduct);
+       
     }
     
-    public void addProduct(String productID, String productName, float upperLimit , float lowerLimit  , String category ,  boolean onlineProduct){
+    public void addProduct(products product){
+        String productName = product.productName;
+        float upperLimit = product.upperLimit;
+        float lowerLimit = product.lowerLimit;
+        String category = product.category;
+        boolean onlineProduct = product.onlineProduct;
         try{
               conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
               statObj = conObj.createStatement();
@@ -55,7 +70,7 @@ public class products{
         }
     }
 
-    public ArrayList<products> viewProducts(){
+    public ArrayList<products> getProducts(){
         try{
             conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
             statObj = conObj.createStatement();
@@ -70,6 +85,18 @@ public class products{
         }
         return prodList;
     }   
-
+    public void viewProducts(){
+        try{
+        conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+        statObj = conObj.createStatement();
+        resObj=statObj.executeQuery("Select * From PRODUCTS");
+        while(resObj.next()){
+            System.out.println(resObj.getString("productID")+ "\t   " + resObj.getString("productname"));
+        }
+    }catch(SQLException e){
+            e.printStackTrace();
+            }
     
+}
+
 }

@@ -12,6 +12,13 @@ import java.util.*;
 public class admin {
     private String adminID;
     private String adminPassword;
+    public admin(){
+        
+    }
+    public admin(String adminPassword){
+         adminID = UUID. randomUUID(). toString();
+         this.adminPassword= adminPassword;
+    }
     Scanner input = new Scanner(System.in);
     public boolean acceptStore(String storeID, String storeName, String storeAddress, String storePhoneNo, String storeType, boolean onSite){
         System.out.println("if you accept the store enter Y ");
@@ -22,8 +29,12 @@ public class admin {
         }else return false;
     }
     public void addProduct(String productID ,String productName, float upperLimit , float lowerLimit, String category , boolean onlineProduct){
-        products product = new products(productID , productName , upperLimit , lowerLimit , category , onlineProduct);
-        product.addToList(product);
+        products product = new products(productName , upperLimit , lowerLimit , category , onlineProduct);
+       product.addProduct(product);
+    }
+    
+    public void addBrand (String brandName , String brandCategory){
+        Brand br = new Brand(brandName , brandCategory);
     }
     
     

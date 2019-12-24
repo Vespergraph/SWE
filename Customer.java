@@ -5,6 +5,7 @@
  */
 package javaapplication1;
 import java.sql.*;
+import java.util.UUID;
 /**
  *
  * @author Ali-Marwan
@@ -14,7 +15,7 @@ public class Customer{
     private String userName;
     private String userPassword ;
     private String userPhoneNo;
-    private String userAddress ;
+    private String userAddress;
     private String userEmail ;
     private String userPaymentDetails;
     private boolean ownsStore = false;
@@ -27,9 +28,9 @@ public class Customer{
         
     }
     
-    public Customer(String userID , String userName ,String userPassword, 
+    public Customer(String userName ,String userPassword, 
     String userAddress, String userPhoneNo, String userEmail, String userPaymentDetails){
-        this.userID = userID;
+        userID = UUID. randomUUID(). toString();
         this.userName = userName;
         this.userPassword = userPassword;
         this.userAddress = userAddress;
@@ -76,8 +77,9 @@ public class Customer{
     public void viewStore(){
         store s = new store();
     }
-    public void buyProduct(String productID, int quanitity){
-        
+    
+    public void buyProduct(String productID, String storeID, int quantity){
+        Sale sale = new Sale(userID ,storeID, productID , quantity);
     }
 }
 

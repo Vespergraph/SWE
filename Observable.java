@@ -9,8 +9,9 @@ package javaapplication1;
  *
  * @author Ali-Marwan
  */
-public interface User {
-    public void register();
-    public void login(String ID, String Pass);
+public interface Observable {
+    public void registerObserver(Observer o);
+    public void unregisterObserver();
+    public void notifyObservers();
     
 }

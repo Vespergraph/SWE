@@ -5,22 +5,13 @@
  */
 package javaapplication1;
 
-
-import java.sql.*;
-
 /**
  *
  * @author Ali-Marwan
  */
-public class JavaApplication1 {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        admin a1 = new admin("a1");
-       
-       
-    }
+public interface Observer {
+    public void update(int views);
+    public void update(String soldOut);
+    
     
 }
