@@ -28,14 +28,49 @@ public class admin {
             return true;
         }else return false;
     }
-    public void addProduct(String productID ,String productName, float upperLimit , float lowerLimit, String category , boolean onlineProduct){
-        products product = new products(productName , upperLimit , lowerLimit , category , onlineProduct);
-       product.addProduct(product);
+    public void addProduct(String productName, int upperLimit , int lowerLimit, String category , boolean onlineProduct){
+        products produc = new products(productName, upperLimit ,lowerLimit , category, onlineProduct);
+        produc.addProduct(produc);
     }
     
     public void addBrand (String brandName , String brandCategory){
         Brand br = new Brand(brandName , brandCategory);
     }
     
+    enum Operation {
+        SUM,
+        MAX,
+        MIN;
+        //AVG;
+    }
+    public float getProductStat(String prodID, Operation op) {
+        if (op == Operation.MAX) {
+            return getProductMaxStat(prodID);
+        }else if(op == Operation.MIN){
+            return getProductMinStat(prodID);
+        }else if(op == Operation.SUM){
+            return getProductSumStat(prodID);
+        }/*else if(op == Operation.AVG){
+            return getProductAvgStat(prodID);
+        }*/
+        return 0;
+    }
     
+    public int getProductMaxStat(String productID) {
+        Sale sale = new Sale();
+        return sale.maxSales(productID);
+        
+    }
+    
+    public int getProductMinStat(String productID){
+        Sale sale = new Sale();
+        return sale.minSales(productID);
+    }
+    public float getProductSumStat(String productID){
+        Sale sale = new Sale();
+        return sale.sumOfSales(productID);
+    }
+    public float getProductAvgStat (String productID){
+        return 0;
+    }
 }

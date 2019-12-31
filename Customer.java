@@ -5,7 +5,9 @@
  */
 package javaapplication1;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.UUID;
+import java.sql.Connection;
 /**
  *
  * @author Ali-Marwan
@@ -37,36 +39,46 @@ public class Customer{
         this.userPhoneNo = userPhoneNo;
         this.userAddress = userAddress;
         this.userPaymentDetails = userPaymentDetails;
-        this.userEmail = userEmail;    
+        this.userEmail = userEmail; 
+        register(userID ,userName,userPassword ,  userAddress,  userPhoneNo ,  userEmail ,  userPaymentDetails);
     }
     
-    public void register(){
+    public void register(String userID ,String userName, String userPassword , String userAddress, String userPhoneNo , String userEmail , String userPaymentDetails){
+        boolean storeOwner= false;
         try{
+            
              conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
              statObj = conObj.createStatement();
-             statObj.executeUpdate("Insert into Customer values( " +userID+ "," +userName+ "," + userPassword+ "," +userAddress+ "," +userPhoneNo+ "," +userPaymentDetails+ "," +userEmail+ ")");
-                     
+            statObj.executeUpdate("INSERT INTO CUSTOMER"+ " VALUES('"+userID+"','"+userName+"','"+userPassword+"','"+userAddress+"','"+userPhoneNo+"','"+userPaymentDetails+ "','"+userEmail+"'," +storeOwner+ ")");
+            statObj.close();
+            conObj.close();
         }catch(SQLException e){
-            e.printStackTrace();         
-                     }
+            e.printStackTrace(); 
+            e.getSQLState();
+                     }  
+
+    
+
         
     }
     
-    public void login(String userID , String userPassword){
-            if(userMatch(userID,userPassword) != true){
-                System.out.println("bad");
+    public void login(String userName , String userPassword){
+            if(userMatches(userName,userPassword) != true){
+                System.out.println("wrong password");
             }
     }
-    public boolean userMatch(String userID, String userPassword){
+    public boolean userMatches(String userID, String userPassword){
         try{
              conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
              statObj = conObj.createStatement();
              resObj=statObj.executeQuery("Select * From CUSTOMER");
              while(resObj.next()){
-                 if(userID.matches(resObj.getString("USERID")) && userPassword.matches(resObj.getString("USERPASSWORD"))){
+                 if(userID.matches(resObj.getString("userName")) && userPassword.matches(resObj.getString("USERPASSWORD"))){
                      return true;
                  }
              }
+            statObj.close();
+            conObj.close();
              
     }catch(SQLException e){
         e.printStackTrace();
@@ -74,12 +86,29 @@ public class Customer{
                 return false;
  
 }
-    public void viewStore(){
-        store s = new store();
+    
+    public StoreOwner becomeStoreOwner(String StoreOwnerID){
+        StoreOwner so = new StoreOwner(StoreOwnerID);
+        ownsStore = true;
+        try{
+            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+            statObj = conObj.createStatement();
+            statObj.executeUpdate("Update Customer set isStoreOwner = true where userID ='"+StoreOwnerID+"'");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return so;
+    }
+    public void viewStore(String StoreID){
+        store s = new store(StoreID);
+        
     }
     
-    public void buyProduct(String productID, String storeID, int quantity){
-        Sale sale = new Sale(userID ,storeID, productID , quantity);
+    public void buyProduct(ArrayList products, String storeID, int quantity){
+        Sale sale = new Sale(userID ,storeID, products, quantity);
+    }
+    public String getUserID(){
+        return userID;
     }
 }
 

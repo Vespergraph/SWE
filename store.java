@@ -28,31 +28,41 @@ public class store implements Observable {
        
        
     public store(){
+        
+    }
+    public store(String StoreID){
         views++;
+        Inventory storeInv = new Inventory();
+        storeInv.viewStoreProducts(StoreID);
     }
        
-    store(String storeName, String storeAddress, String storePhoneNo, String storeType, int views , boolean onSite, String ownerID){
+    store(String storeName, String storeAddress, String storePhoneNo, String storeType,  boolean onSite, String ownerID){
        storeID = UUID. randomUUID(). toString();
        this.storeName = storeName;
        this.storeAddress = storeAddress;
        this.storePhoneNo = storePhoneNo;
        this.storeType = storeType;
-       this.views = views;
+       views = 0;
        this.onSite = onSite;
        visible = false;
-       createStore(ownerID);
+       createStore(storeName , storeAddress , storePhoneNo , storeType , onSite ,ownerID);
    }
        
-    public void createStore(String ownerID){
+    public void createStore(String storeName, String storeAddress, String storePhoneNo, String storeType,  boolean onSite, String ownerID){
+        
+        boolean visible = false;
+        boolean onsite = false;
+        int views = 0;
         try{
            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
            statObj = conObj.createStatement();
-           statObj.executeUpdate("Insert into STORE values (" +storeID +"," +storeName+ "," +storeAddress+ "," +storePhoneNo+ "," +storeType+ "," +views+ "," +onSite+ "," +visible+  " )" );
-           statObj.executeUpdate("Insert into Store (OWNERID) values ( "+ownerID+ ")");
+           statObj.executeUpdate("INSERT INTO STORE " + "values ('"+storeID+"','"+storeName+"','"+storeAddress+"','"+storePhoneNo+"',"+views+ "," +onsite+ "," +visible+ ",'" +ownerID+ "','"+storeType+ "')" ); 
            if(admin.acceptStore(storeID, storeName, storeAddress, storePhoneNo,storeType, onSite) == true){
             visible = true;
-            statObj.executeUpdate("Insert into STORE (VISIBLE) values ( " +visible+ ")");
+            statObj.executeUpdate("Insert into STORE (VISIBLE) values ( '" +visible+ "')");
         }
+        statObj.close();
+        conObj.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -76,5 +86,18 @@ public class store implements Observable {
     @Override
     public void notifyObservers() {
         observer.update(views);
+    }
+    public String myOwner(String storeID){
+        String owner = null;
+        try{
+           conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+           statObj = conObj.createStatement();
+           owner = resObj.getString("select OwnerID from store where storeID = '" +storeID+ "')");
+           resObj.close();
+           conObj.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return owner;
     }
 }

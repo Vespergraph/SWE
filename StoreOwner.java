@@ -29,8 +29,14 @@ public class StoreOwner extends Customer implements Observer {
         myStores.add(storeID);
     }
     
-    public void newStore(String storeName, String storeAddress, String storePhoneNo, String storeType, int views , boolean onSite){
-    store sd = new store(storeName,  storeAddress,  storePhoneNo,  storeType,  views ,  onSite , ownerID);
+    public StoreOwner(String ownerID){
+        this.ownerID = ownerID;
+    }
+    public StoreOwner(){
+        
+    }
+    public void newStore(String storeName, String storeAddress, String storePhoneNo, String storeType,  boolean onSite){
+    store sd = new store(storeName,  storeAddress,  storePhoneNo,  storeType,   onSite , ownerID);
     }
     
     public void viewSystemProducts(){
@@ -38,11 +44,11 @@ public class StoreOwner extends Customer implements Observer {
         p.viewProducts();
     }
     
-    public void addProduct(String storeID , String productID , float price , int amount){// do rest of parameters
+    public void addProduct(String storeID , String productID , float price , int amount){
         
-        Inventory IO = new Inventory();
-        IO.addToInventory(storeID , productID , price , amount);
-        record.add("( added " +productID+ "to" +storeID+ ")");
+        Inventory I = new Inventory();
+        I.addToInventory(storeID , productID , price , amount);
+      //  record.add("( added " +productID+ "to" +storeID+ ")");
     }
 
 

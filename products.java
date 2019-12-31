@@ -13,8 +13,8 @@ import java.util.*;
 public class products{
     private String productID;
     private String productName;
-    private float upperLimit;
-    private float lowerLimit;
+    private int upperLimit;
+    private int lowerLimit;
    // private float price = 0;
     private String category;
     //private int quantity = 0;
@@ -33,7 +33,7 @@ public class products{
         
     }
     
-    products(String productID ,String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
+    products(String productID ,String productName , int upperLimit , int lowerLimit , String category , boolean onlineProduct ){
     this.productID = productID;
     this.productName = productName;
     this.upperLimit = upperLimit;
@@ -43,7 +43,7 @@ public class products{
     }
 
            
-    products(String productName , float upperLimit , float lowerLimit , String category , boolean onlineProduct ){
+    products(String productName , int upperLimit , int lowerLimit , String category , boolean onlineProduct ){
         productID = UUID. randomUUID(). toString();
         this.productName = productName;
         this.upperLimit = upperLimit;
@@ -54,19 +54,16 @@ public class products{
        
     }
     
-    public void addProduct(products product){
-        String productName = product.productName;
-        float upperLimit = product.upperLimit;
-        float lowerLimit = product.lowerLimit;
-        String category = product.category;
-        boolean onlineProduct = product.onlineProduct;
+    public void addProduct(products produc){
         try{
-              conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
-              statObj = conObj.createStatement();
-              statObj.executeUpdate("Insert into PRODUCTS (PRODUCTID , PRODUCTNAME , PRICEUPPERLIMIT, PRICELOWERLIMIT , CATEGORY , ONLINEPRODUCT) values "
-                      + "(" +productID+ "," +productName+ "," +upperLimit+ "," +lowerLimit+ ","  +category+ ","  +onlineProduct+ ")");
+            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+            statObj = conObj.createStatement();
+            statObj.executeUpdate("Insert into PRODUCTS values('"+produc.getProductID()+"','"+produc.getProductName()+"',"+produc.getUpperLimit()+","+produc.getLowerLimit()+",'"+produc.getCategory()+ "','"+produc.isOnlineProduct()+"')");
+            statObj.close();
+            conObj.close();
         }catch(SQLException e){
             e.printStackTrace();
+            e.getMessage();
         }
     }
 
@@ -77,7 +74,7 @@ public class products{
             resObj=statObj.executeQuery("Select * From PRODUCTS");
             while(resObj.next()){
              //   System.out.println(resObj.getString("productID")+ "\t   " + resObj.getString("productname"));
-             products pr = new products(resObj.getString("productID") , resObj.getString("productName") , resObj.getFloat("priceUpperLimit") , resObj.getFloat("priceLowerLimit") , resObj.getString("category") , resObj.getBoolean("onlineproduct"));
+             products pr = new products(resObj.getString("productID") , resObj.getString("productName") , resObj.getInt("priceUpperLimit") , resObj.getInt("priceLowerLimit") , resObj.getString("category") , resObj.getBoolean("onlineproduct"));
              prodList.add(pr);
             }           
         }catch(SQLException e){
@@ -93,10 +90,63 @@ public class products{
         while(resObj.next()){
             System.out.println(resObj.getString("productID")+ "\t   " + resObj.getString("productname"));
         }
+        statObj.close();
+        conObj.close();
     }catch(SQLException e){
             e.printStackTrace();
             }
+     
     
 }
+    public String getProductName(String productID){
+        String Name= null;
+        try{
+            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+            statObj = conObj.createStatement();
+            Name= resObj.getString("(Select productName from products where productID = '" +productID+ "')");
+            statObj.close();
+            conObj.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return Name;
+        
+    }
+    public String getProductCategory(String ProductID){
+        String category= null;
+        try{
+            conObj = DriverManager.getConnection("jdbc:derby://localhost:1527/MyDataBase", "am", "am");
+            statObj = conObj.createStatement();
+            category= resObj.getString("(Select Category from products where productID ='" +productID+ "')");
+            resObj.close();
+            conObj.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return category;
+        
+    }
+    public String getProductName() {
+        return productName;
+    }
 
-}
+    public float getUpperLimit() {
+        return upperLimit;
+    }
+
+    public float getLowerLimit() {
+        return lowerLimit;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public boolean isOnlineProduct() {
+        return onlineProduct;
+    }
+
+    }
+
+    
+
